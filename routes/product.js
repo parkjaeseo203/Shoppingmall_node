@@ -15,8 +15,15 @@ router.get('/total', (req, res) => {
 // product 등록하기
 
 router.post('/', (req, res) => {
+
+    const newProduct = {
+        name: req.body.productName,
+        price: req.body.productPrice
+    }
+
     res.json({
-        message: 'product 등록하기'
+        message: 'product 등록하기',
+        productInfo: newProduct
     })
 })
 
