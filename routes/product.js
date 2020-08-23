@@ -9,11 +9,33 @@ const productModel = require('../models/product')
 
 // product 불러오기
 
-router.get('/total', (req, res) => {
-    res.json({
-        message: 'product 불러오기'
-    })
+router.get('/', (req, res) => {
+
+    productModel
+        .find()
+        .then(docs => {
+            res.json({
+                message: "successful product total date",
+                count: docs.length,
+                products: docs
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
+
+
+
+    // res.json({
+    //     message: 'product 불러오기'
+    // })
 })
+
+
+
+
 
 // product 등록하기
 
