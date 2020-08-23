@@ -4,6 +4,9 @@
 const express = require("express")
 const router = express.Router();
 
+
+const productModel = require('../models/product')
+
 // product 불러오기
 
 router.get('/total', (req, res) => {
@@ -16,15 +19,34 @@ router.get('/total', (req, res) => {
 
 router.post('/', (req, res) => {
 
-    const newProduct = {
-        name: req.body.productName,
-        price: req.body.productPrice
-    }
-
-    res.json({
-        message: 'product 등록하기',
-        productInfo: newProduct
+    const newProduct = new productModel({
+        name: req.body.productname,
+        price: req.body.productprice
     })
+
+    newProduct
+        .save()
+        .then(doc => {
+            res.json({
+                message: "saved product",
+                productInfo: doc
+            })
+        })
+        .catch(err => {
+            res.json({
+                massege: err.message
+            })
+        })
+
+    // const newProduct = {
+    //     name: req.body.productName,
+    //     price: req.body.productPrice
+    // }
+    //
+    // res.json({
+    //     message: 'product 등록하기',
+    //     productInfo: newProduct
+    // })
 })
 
 // product 업데이트하기
