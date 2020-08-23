@@ -2,7 +2,25 @@
 const express = require('express')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 const app = express()
+
+
+// 데이터베이스 연결
+
+
+const dbAdress = "mongodb+srv://bangnany:4275@cluster0.kgd8x.mongodb.net/Shoppingmall?retryWrites=true&w=majority"
+
+const dbOptions = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}
+
+mongoose
+    .connect(dbAdress, dbOptions)
+    .then(() => console.log("MongoDB Connected..."))
+    .catch(err => console.log(err))
+
 
 
 const productRoute = require('./routes/product')
