@@ -7,7 +7,7 @@ const router = express.Router();
 
 const productModel = require('../models/product')
 
-// product 불러오기
+// total product 불러오기
 
 router.get('/', (req, res) => {
 
@@ -31,6 +31,28 @@ router.get('/', (req, res) => {
     // res.json({
     //     message: 'product 불러오기'
     // })
+})
+
+
+//get detail product
+
+router.get('/:productId', (req, res) => {
+
+    productModel
+        .findById(req.params.productId)
+        .then(doc => {
+            res.json({
+                message: "Successful get product at " + req.params.productId,
+                productInfo: doc
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
+
+
 })
 
 
@@ -82,10 +104,22 @@ router.patch('/', (req, res) => {
 
 // product 삭제하기
 
-router.delete('/', (req, res) => {
-    res.json({
-        message: 'product 삭제하기'
-    })
+router.delete('/:productId', (req, res) => {
+    // res.json({
+    //     message: 'product 삭제하기'
+    // })
+    productModel
+        .findByIdAndDelete(req.params.productId)
+        .then(() => {
+            res.json({
+                message: 'deleted product'
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
 })
 
 // 2
