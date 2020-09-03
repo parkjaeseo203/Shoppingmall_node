@@ -13,7 +13,8 @@ const dbAdress = "mongodb+srv://bangnany:4275@cluster0.kgd8x.mongodb.net/Shoppin
 
 const dbOptions = {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 }
 
 mongoose
