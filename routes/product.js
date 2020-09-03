@@ -17,7 +17,17 @@ router.get('/', (req, res) => {
             res.json({
                 message: "successful product total date",
                 count: docs.length,
-                products: docs
+                products: docs.map(doc => {
+                    return{
+                        id: doc._id,
+                        name: doc.name,
+                        price: doc.price,
+                        request: {
+                            type: 'GET',
+                            url: "http://localhost:4275/product/" + doc._id
+                        }
+                    }
+                })
             })
         })
         .catch(err => {
@@ -43,7 +53,15 @@ router.get('/:productId', (req, res) => {
         .then(doc => {
             res.json({
                 message: "Successful get product at " + req.params.productId,
-                productInfo: doc
+                productInfo: {
+                    id: doc._id,
+                    name: doc.name,
+                    price: doc.price,
+                    request:  {
+                        type: 'GET',
+                        url: "http://localhost:4275/product"
+                    }
+                }
             })
         })
         .catch(err => {
@@ -73,7 +91,15 @@ router.post('/', (req, res) => {
         .then(doc => {
             res.json({
                 message: "saved product",
-                productInfo: doc
+                productInfo: {
+                    id: doc._id,
+                    name: doc.name,
+                    price: doc.price,
+                    request: {
+                        type: 'GET',
+                        url: "http://localhost:4275/product/" + doc._id
+                    }
+                }
             })
         })
         .catch(err => {
@@ -108,7 +134,11 @@ router.patch('/:productId', (req, res) => {
         .findByIdAndUpdate(req.params.productId, {$set: updateOps})
         .then(() => {
             res.json({
-                message: 'updated product at ' + req.params.productId
+                message: 'updated product at ' + req.params.productId,
+                request: {
+                    type: 'GET',
+                    url: "http://localhost:4275/product/" + req.params.productId
+                }
             })
         })
         .catch(err => {
@@ -132,7 +162,11 @@ router.delete('/:productId', (req, res) => {
         .findByIdAndDelete(req.params.productId)
         .then(() => {
             res.json({
-                message: 'deleted product'
+                message: 'deleted product',
+                request: {
+                    type: 'GET',
+                    url: "http://localhost:4275/product"
+                }
             })
         })
         .catch(err => {
