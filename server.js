@@ -26,6 +26,7 @@ mongoose
 
 const productRoute = require('./routes/product')
 const orderRoute = require('./routes/order')
+const userRoute = require('./routes/user')
 
 // 미들웨어 설정
 app.use(morgan('dev'))
@@ -38,6 +39,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // 라우팅
 app.use('/product', productRoute)
 app.use('/order', orderRoute)
+app.use('/user', userRoute)
 
 
 const port = 4275
