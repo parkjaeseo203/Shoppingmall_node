@@ -91,19 +91,51 @@ router.post('/', (req, res) => {
 
 //order 업데이트하기
 
-router.put('/', (req, res) => {
-    res.json({
-        message: 'order 업데이트하기'
-    })
+router.put('/:productID', (req, res) => {
+
+    const updateOps = {}
+    for (const ops of req.body) {
+        updateOps[ops. propName] = ops.value
+    }
+
+    orderModel
+        .findByIdAndUpdate(req.params.productID, {$set: updateOps})
+        .then(() => {
+            res.json({
+                message: 'Updated orderlist at ' + req.params.productID
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
+    // res.json({
+    //     message: 'order 업데이트하기'
+    // })
 })
 
 
 //order 삭제하기
 
-router.delete('/', (req, res) => {
-    res.json({
-        message: 'order 삭제하기'
-    })
+router.delete('/:productID', (req, res) => {
+
+    orderModel
+        .findByIdAndDelete(req.params.productID)
+        .then(() => {
+            res.json({
+                message: 'deleted product'
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
+
+    // res.json({
+    //     message: 'order 삭제하기'
+    // })
 })
 
 
