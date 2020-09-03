@@ -95,10 +95,30 @@ router.post('/', (req, res) => {
 
 // product 업데이트하기
 
-router.patch('/', (req, res) => {
-    res.json({
-        message: 'product 업데이트하기'
-    })
+router.patch('/:productId', (req, res) => {
+
+    // 업데이트 내용
+    const updateOps = {}
+    for (const ops of req.body) {
+        updateOps[ops.propName] = ops.value
+    }
+
+
+    productModel
+        .findByIdAndUpdate(req.params.productId, {$set: updateOps})
+        .then(() => {
+            res.json({
+                message: 'updated product at ' + req.params.productId
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
+    // res.json({
+    //     message: 'product 업데이트하기'
+    // })
 })
 
 
@@ -121,6 +141,24 @@ router.delete('/:productId', (req, res) => {
             })
         })
 })
+
+//전체삭제
+
+router.delete('/', (req, res) => {
+    productModel
+        .remove()
+        .then(() => {
+            res.json({
+                message: 'deleted products'
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.massege
+            })
+        })
+})
+
 
 // 2
 module.exports = router;
