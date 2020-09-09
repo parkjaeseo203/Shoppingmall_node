@@ -18,7 +18,11 @@ router.get('/', (req, res) => {
                     return{
                         id: doc._id,
                         product: doc.product,
-                        quantity: doc.quantity
+                        quantity: doc.quantity,
+                        request: {
+                            type: 'GET',
+                            url: 'http://localhost:4275/order/' + doc._id
+                        }
                     }
                 })
             })
@@ -43,7 +47,11 @@ router.get('/:productID', (req, res) => {
                 productInfo: {
                     id: doc._id,
                     product: doc.product,
-                    quantity: doc.quantity
+                    quantity: doc.quantity,
+                    request: {
+                        type: 'GET',
+                        url: 'http://localhost:4275/order'
+                    }
 
                 }
             })
@@ -72,7 +80,11 @@ router.post('/', (req, res) => {
                 orderInfo: {
                     id: doc._id,
                     product: doc.product,
-                    quantity: doc.quantity
+                    quantity: doc.quantity,
+                    request: {
+                        type: 'GET',
+                        url: 'http://localhost:4275/order/' + doc._id
+                    }
                 }
             })
         })
@@ -102,7 +114,11 @@ router.put('/:productID', (req, res) => {
         .findByIdAndUpdate(req.params.productID, {$set: updateOps})
         .then(() => {
             res.json({
-                message: 'Updated orderlist at ' + req.params.productID
+                message: 'Updated orderlist at ' + req.params.productID,
+                request: {
+                    type: 'GET',
+                    url: 'http://localhost:4275/order/' + req.params.productID
+                }
             })
         })
         .catch(err => {
@@ -124,7 +140,11 @@ router.delete('/:productID', (req, res) => {
         .findByIdAndDelete(req.params.productID)
         .then(() => {
             res.json({
-                message: 'deleted product'
+                message: 'deleted product',
+                request: {
+                    type: 'GET',
+                    url: 'http://localhost:4275/order'
+                }
             })
         })
         .catch(err => {
