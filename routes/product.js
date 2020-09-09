@@ -6,193 +6,40 @@ const router = express.Router();
 const checkAuth = require('../middleware/check-auth')
 
 
-const productModel = require('../models/product')
+const {
+    products_get_all,
+    products_post_product,
+    products_patch_product,
+    products_delete_product,
+    products_delete_all,
+    products_get_product
+} = require('../controllers/product')
+
+
 
 // total product 불러오기
 
-router.get('/', (req, res) => {
-
-    productModel
-        .find()
-        .then(docs => {
-            res.json({
-                message: "successful product total date",
-                count: docs.length,
-                products: docs.map(doc => {
-                    return{
-                        id: doc._id,
-                        name: doc.name,
-                        price: doc.price,
-                        request: {
-                            type: 'GET',
-                            url: "http://localhost:4275/product/" + doc._id
-                        }
-                    }
-                })
-            })
-        })
-        .catch(err => {
-            res.json({
-                message: err.message
-            })
-        })
-
-
-
-    // res.json({
-    //     message: 'product 불러오기'
-    // })
-})
-
+router.get('/', products_get_all)
 
 //get detail product
 
-router.get('/:productId', checkAuth, (req, res) => {
-
-    productModel
-        .findById(req.params.productId)
-        .then(doc => {
-            res.json({
-                message: "Successful get product at " + req.params.productId,
-                productInfo: {
-                    id: doc._id,
-                    name: doc.name,
-                    price: doc.price,
-                    request:  {
-                        type: 'GET',
-                        url: "http://localhost:4275/product"
-                    }
-                }
-            })
-        })
-        .catch(err => {
-            res.json({
-                message: err.message
-            })
-        })
-
-
-})
-
-
-
-
+router.get('/:productId', checkAuth, products_get_product)
 
 // product 등록하기
 
-router.post('/', checkAuth, (req, res) => {
-
-    const newProduct = new productModel({
-        name: req.body.productname,
-        price: req.body.productprice
-    })
-
-    newProduct
-        .save()
-        .then(doc => {
-            res.json({
-                message: "saved product",
-                productInfo: {
-                    id: doc._id,
-                    name: doc.name,
-                    price: doc.price,
-                    request: {
-                        type: 'GET',
-                        url: "http://localhost:4275/product/" + doc._id
-                    }
-                }
-            })
-        })
-        .catch(err => {
-            res.json({
-                massege: err.message
-            })
-        })
-
-    // const newProduct = {
-    //     name: req.body.productName,
-    //     price: req.body.productPrice
-    // }
-    //
-    // res.json({
-    //     message: 'product 등록하기',
-    //     productInfo: newProduct
-    // })
-})
+router.post('/', checkAuth, products_post_product)
 
 // product 업데이트하기
 
-router.patch('/:productId', checkAuth, (req, res) => {
-
-    // 업데이트 내용
-    const updateOps = {}
-    for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value
-    }
-
-
-    productModel
-        .findByIdAndUpdate(req.params.productId, {$set: updateOps})
-        .then(() => {
-            res.json({
-                message: 'updated product at ' + req.params.productId,
-                request: {
-                    type: 'GET',
-                    url: "http://localhost:4275/product/" + req.params.productId
-                }
-            })
-        })
-        .catch(err => {
-            res.json({
-                message: err.message
-            })
-        })
-    // res.json({
-    //     message: 'product 업데이트하기'
-    // })
-})
-
+router.patch('/:productId', checkAuth, products_patch_product)
 
 // product 삭제하기
 
-router.delete('/:productId', checkAuth, (req, res) => {
-    // res.json({
-    //     message: 'product 삭제하기'
-    // })
-    productModel
-        .findByIdAndDelete(req.params.productId)
-        .then(() => {
-            res.json({
-                message: 'deleted product',
-                request: {
-                    type: 'GET',
-                    url: "http://localhost:4275/product"
-                }
-            })
-        })
-        .catch(err => {
-            res.json({
-                message: err.message
-            })
-        })
-})
+router.delete('/:productId', checkAuth, products_delete_product)
 
 //전체삭제
 
-router.delete('/', (req, res) => {
-    productModel
-        .remove()
-        .then(() => {
-            res.json({
-                message: 'deleted products'
-            })
-        })
-        .catch(err => {
-            res.json({
-                message: err.massege
-            })
-        })
-})
+router.delete('/', products_delete_all)
 
 
 // 2
