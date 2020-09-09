@@ -7,9 +7,12 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
 exports.user_login = (req, res) => {
+
+    const {email, password} = req.body
+
     // email유무 체크 -> 패스워드 매칭 -> 토큰 발행
     userModel
-        .findOne({email: req.body.email})
+        .findOne({email})
         .then(user => {
             if (!user) {
                 return res.json({
@@ -17,7 +20,7 @@ exports.user_login = (req, res) => {
                 })
             }
             else {
-                bcrypt.compare(req.body.password, user.password, (err, result) => {
+                bcrypt.compare(password, user.password, (err, result) => {
 
                     if (err || result === false) {
                         return res.json({
@@ -55,11 +58,12 @@ exports.user_login = (req, res) => {
 
 exports.user_register = (req, res) => {
 
+    const {email, name, password} = req.body
 
     // email check -> password 암호화 -> model/user db저장
 
     userModel
-        .findOne({email: req.body.email})
+        .findOne({email})
         .then(user => {
             if (user) {
                 return res.json({
@@ -69,7 +73,7 @@ exports.user_register = (req, res) => {
 
             else {
 
-                bcrypt.hash(req.body.password, 10, (err, hash) => {
+                bcrypt.hash(password, 10, (err, hash) => {
 
                     if(err) {
                         return res.json({
@@ -80,8 +84,8 @@ exports.user_register = (req, res) => {
                     else{
 
                         const newUser = new userModel({
-                            name: req.body.name,
-                            email: req.body.email,
+                            name,
+                            email,
                             password: hash
                         })
 

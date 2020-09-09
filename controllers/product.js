@@ -43,9 +43,12 @@ exports.products_get_all = (req, res) => {
 
 exports.products_post_product = (req, res) => {
 
+
+    const {name, price} = req.body;
+
     const newProduct = new productModel({
-        name: req.body.productname,
-        price: req.body.productprice
+        name,
+        price
     })
 
     newProduct
