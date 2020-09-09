@@ -3,6 +3,7 @@
 // 1
 const express = require("express")
 const router = express.Router();
+const checkAuth = require('../middleware/check-auth')
 
 
 const productModel = require('../models/product')
@@ -46,7 +47,7 @@ router.get('/', (req, res) => {
 
 //get detail product
 
-router.get('/:productId', (req, res) => {
+router.get('/:productId', checkAuth, (req, res) => {
 
     productModel
         .findById(req.params.productId)
@@ -79,7 +80,7 @@ router.get('/:productId', (req, res) => {
 
 // product 등록하기
 
-router.post('/', (req, res) => {
+router.post('/', checkAuth, (req, res) => {
 
     const newProduct = new productModel({
         name: req.body.productname,
@@ -121,7 +122,7 @@ router.post('/', (req, res) => {
 
 // product 업데이트하기
 
-router.patch('/:productId', (req, res) => {
+router.patch('/:productId', checkAuth, (req, res) => {
 
     // 업데이트 내용
     const updateOps = {}
@@ -154,7 +155,7 @@ router.patch('/:productId', (req, res) => {
 
 // product 삭제하기
 
-router.delete('/:productId', (req, res) => {
+router.delete('/:productId', checkAuth, (req, res) => {
     // res.json({
     //     message: 'product 삭제하기'
     // })
